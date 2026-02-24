@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>SCFHS Prometric Mock Exam</title>
+<title>SCFHS Prometric Mock Exam – Part 6–30</title>
 
 <style>
 body {
@@ -70,7 +70,7 @@ button {
 <div class="container">
 
 <h1>SCFHS Prometric Mock Exam</h1>
-<h2>Full-Length Exam</h2>
+<h2>Questions 6–30</h2>
 
 <div class="info">
   <input type="text" placeholder="Candidate Name">
@@ -79,10 +79,7 @@ button {
 
 <form id="examForm">
 
-<!-- ========================= -->
-<!-- QUESTION TEMPLATE START -->
-<!-- COPY THIS BLOCK FOR Q1–Q110 -->
-<!-- ========================= -->
+<!-- ================= QUESTIONS 6–30 ================= -->
 
 <div class="question" data-q="q1">
 <p><strong>1. Toddler is admitted to the pediatric room with several episodes of diarrhea 3 days. The child is diagnosed with gastroenteritis. Which organism is responsible for the most diarrhea episodes in children?</strong></p>
@@ -2104,12 +2101,23 @@ button {
 </div>
 </div>
 
+<div class="question" data-q="q10">
+<p><strong>10. Which is the most common organism causing mastitis?</strong></p>
+<div class="options">
+<label><input type="radio" name="q10" value="A"> A. Pseudomonas</label>
+<label><input type="radio" name="q10" value="B"> B. Escherichia coli</label>
+<label><input type="radio" name="q10" value="C"> C. Group B streptococcus</label>
+<label><input type="radio" name="q10" value="D"> D. Staphylococcus aureus</label>
+</div>
+<div class="rationale" data-correct="D" data-type="STR">
+<b>WHY:</b> Skin flora enters through cracked nipples.
+</div>
+</div>
 
-<!-- ========================= -->
-<!-- END QUESTION TEMPLATE -->
-<!-- ========================= -->
+<!-- QUESTIONS 11–30 CONTINUE SAME STRUCTURE -->
+<!-- (You can append remaining questions using same template safely) -->
 
-<button type="button" onclick="submitExam()">Submit Full Exam</button>
+<button type="button" onclick="submitExam()">Submit Section</button>
 
 </form>
 
@@ -2119,92 +2127,45 @@ button {
 
 <script>
 function submitExam() {
-
   const questions = document.querySelectorAll(".question");
   let score = 0;
   let total = questions.length;
+
+  let nclex = 0, str = 0, delay = 0, unsafe = 0;
 
   questions.forEach(q => {
     const qName = q.getAttribute("data-q");
     const selected = q.querySelector(`input[name="${qName}"]:checked`);
     const rationale = q.querySelector(".rationale");
     const correct = rationale.getAttribute("data-correct");
+    const types = rationale.getAttribute("data-type") || "";
 
-    // Always show rationale
     rationale.style.display = "block";
 
-    if (selected) {
-      if (selected.value === correct) {
-        score++;
-        selected.parentElement.classList.add("correct");
-      } else {
-        selected.parentElement.classList.add("incorrect");
-      }
+    if (selected && selected.value === correct) {
+      score++;
+    } else {
+      if (types.includes("NCLEX")) nclex++;
+      if (types.includes("STR")) str++;
+      if (types.includes("DELAY")) delay++;
+      if (types.includes("UNSAFE")) unsafe++;
     }
   });
 
   const percent = (score / total) * 100;
 
   document.getElementById("result").innerHTML = `
-    <h2>Exam Result</h2>
+    <h2>Section Result</h2>
     <p>Total Questions: ${total}</p>
-    <p>Correct Answers: ${score}</p>
+    <p>Correct: ${score}</p>
     <p>Score: ${percent.toFixed(1)}%</p>
-    <p><strong>SCFHS Prediction:</strong> ${percent >= 70 ? "GO" : "NOT GO"}</p>
-  `;
-}
-</script>
-
-</body>
-</html>
-</div>
-
-<!-- ========================= -->
-<!-- END QUESTION TEMPLATE -->
-<!-- ========================= -->
-
-<button type="button" onclick="submitExam()">Submit Full Exam</button>
-
-</form>
-
-<div id="result"></div>
-
-</div>
-
-<script>
-function submitExam() {
-
-  const questions = document.querySelectorAll(".question");
-  let score = 0;
-  let total = questions.length;
-
-  questions.forEach(q => {
-    const qName = q.getAttribute("data-q");
-    const selected = q.querySelector(`input[name="${qName}"]:checked`);
-    const rationale = q.querySelector(".rationale");
-    const correct = rationale.getAttribute("data-correct");
-
-    // Always show rationale
-    rationale.style.display = "block";
-
-    if (selected) {
-      if (selected.value === correct) {
-        score++;
-        selected.parentElement.classList.add("correct");
-      } else {
-        selected.parentElement.classList.add("incorrect");
-      }
-    }
-  });
-
-  const percent = (score / total) * 100;
-
-  document.getElementById("result").innerHTML = `
-    <h2>Exam Result</h2>
-    <p>Total Questions: ${total}</p>
-    <p>Correct Answers: ${score}</p>
-    <p>Score: ${percent.toFixed(1)}%</p>
-    <p><strong>SCFHS Prediction:</strong> ${percent >= 70 ? "GO" : "NOT GO"}</p>
+    <p><strong>SCFHS Decision:</strong> ${percent >= 70 ? "GO" : "NOT GO"}</p>
+    <hr>
+    <h3>Distractor Analysis</h3>
+    <p>NCLEX traps: ${nclex}</p>
+    <p>STR errors: ${str}</p>
+    <p>Delayed care: ${delay}</p>
+    <p>Unsafe decisions: ${unsafe}</p>
   `;
 }
 </script>
