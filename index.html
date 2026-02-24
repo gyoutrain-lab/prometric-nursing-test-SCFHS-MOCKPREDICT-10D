@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>SCFHS Prometric Mock Exam | Maternity</title>
+<title>SCFHS Prometric Mock Exam</title>
 
 <style>
 body {
@@ -70,7 +70,7 @@ button {
 <div class="container">
 
 <h1>SCFHS Prometric Mock Exam</h1>
-<h2>Questions 1–100</h2>
+<h2>Full-Length Exam</h2>
 
 <div class="info">
   <input type="text" placeholder="Candidate Name">
@@ -79,20 +79,22 @@ button {
 
 <form id="examForm">
 
-<!-- ================= QUESTIONS 6–30 ================= -->
+<!-- ========================= -->
+<!-- QUESTION TEMPLATE START -->
+<!-- COPY THIS BLOCK FOR Q1–Q110 -->
+<!-- ========================= -->
 
-<div class="question" data-q="q6">
-<p><strong>1. The nurse was planning care for a 25-year-old primigravida post-partum mother who had engorgement due to poor feeding technique. The left breast appeared red and swollen and was diagnosed as mastitis. Which is the best education for the mother?</strong></p>
+<div class="question" data-q="q1">
+<p><strong>1. Toddler is admitted to the pediatric room with several episodes of diarrhea 3 days. The child is diagnosed with gastroenteritis. Which organism is responsible for the most diarrhea episodes in children?</strong></p>
 <div class="options">
-<label><input type="radio" name="q6" value="A"> A. Avoid wearing brassiere</label>
-<label><input type="radio" name="q6" value="B"> B. Begin suckling on the right breast</label>
-<label><input type="radio" name="q6" value="C"> C. Stop pumping milk from the left breast</label>
-<label><input type="radio" name="q6" value="D"> D. Take antibiotics till the soreness subside</label>
+<label><input type="radio" name="q1" value="A"> A. Rota</label>
+<label><input type="radio" name="q1" value="B"> B. Bacillus magissterium</label>
+<label><input type="radio" name="q1" value="C"> C. Shigella</label>
+<label><input type="radio" name="q1" value="D"> D. Staphylococcus</label>
 </div>
-<div class="rationale" data-correct="D" data-type="NCLEX,DELAY">
-<b>WHY:</b> Mastitis is a bacterial infection that requires antibiotic therapy.<br>
-<b>HOW:</b> Treating infection prevents abscess and systemic spread. Breastfeeding may continue, but antibiotics are essential.<br>
-<b>Distractors:</b> A,B,C delay or fail to treat infection.
+<div class="rationale" data-correct="A" data-type="PEDIATRICS">
+<b>WHY:</b> Rotavirus is the leading cause of severe diarrhea in young children.<br>
+<b>HOW:</b> Infection leads to watery diarrhea and dehydration, common in pediatric gastroenteritis.
 </div>
 </div>
 
@@ -222,10 +224,11 @@ button {
 </div>
 </div>
 
-<!-- QUESTIONS 11–30 CONTINUE SAME STRUCTURE -->
-<!-- (You can append remaining questions using same template safely) -->
+<!-- ========================= -->
+<!-- END QUESTION TEMPLATE -->
+<!-- ========================= -->
 
-<button type="button" onclick="submitExam()">Submit Section</button>
+<button type="button" onclick="submitExam()">Submit Full Exam</button>
 
 </form>
 
@@ -235,45 +238,38 @@ button {
 
 <script>
 function submitExam() {
+
   const questions = document.querySelectorAll(".question");
   let score = 0;
   let total = questions.length;
-
-  let nclex = 0, str = 0, delay = 0, unsafe = 0;
 
   questions.forEach(q => {
     const qName = q.getAttribute("data-q");
     const selected = q.querySelector(`input[name="${qName}"]:checked`);
     const rationale = q.querySelector(".rationale");
     const correct = rationale.getAttribute("data-correct");
-    const types = rationale.getAttribute("data-type") || "";
 
+    // Always show rationale
     rationale.style.display = "block";
 
-    if (selected && selected.value === correct) {
-      score++;
-    } else {
-      if (types.includes("NCLEX")) nclex++;
-      if (types.includes("STR")) str++;
-      if (types.includes("DELAY")) delay++;
-      if (types.includes("UNSAFE")) unsafe++;
+    if (selected) {
+      if (selected.value === correct) {
+        score++;
+        selected.parentElement.classList.add("correct");
+      } else {
+        selected.parentElement.classList.add("incorrect");
+      }
     }
   });
 
   const percent = (score / total) * 100;
 
   document.getElementById("result").innerHTML = `
-    <h2>Section Result</h2>
+    <h2>Exam Result</h2>
     <p>Total Questions: ${total}</p>
-    <p>Correct: ${score}</p>
+    <p>Correct Answers: ${score}</p>
     <p>Score: ${percent.toFixed(1)}%</p>
-    <p><strong>SCFHS Decision:</strong> ${percent >= 70 ? "GO" : "NOT GO"}</p>
-    <hr>
-    <h3>Distractor Analysis</h3>
-    <p>NCLEX traps: ${nclex}</p>
-    <p>STR errors: ${str}</p>
-    <p>Delayed care: ${delay}</p>
-    <p>Unsafe decisions: ${unsafe}</p>
+    <p><strong>SCFHS Prediction:</strong> ${percent >= 70 ? "GO" : "NOT GO"}</p>
   `;
 }
 </script>
